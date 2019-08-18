@@ -2,8 +2,8 @@ provider "aws" {
 }
 
 provider "aws" {
-	alias = "us_east_1"
-	region = "us-east-1"
+  alias  = "us_east_1"
+  region = "us-east-1"
 }
 
 resource "aws_cloudfront_distribution" "distribution" {
@@ -18,7 +18,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   origin {
     domain_name = module.apigw_origin.domain_name
     origin_id   = "apigw"
-		origin_path = module.apigw_origin.stage_path
+    origin_path = module.apigw_origin.stage_path
 
     custom_origin_config {
       http_port              = 80
@@ -52,10 +52,10 @@ resource "aws_cloudfront_distribution" "distribution" {
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "apigw"
 
-		lambda_function_association {
-			event_type = "origin-request"
-			lambda_arn = "${aws_lambda_function.lambda_edge.qualified_arn}"
-		}
+    lambda_function_association {
+      event_type = "origin-request"
+      lambda_arn = "${aws_lambda_function.lambda_edge.qualified_arn}"
+    }
 
     default_ttl = 0
     min_ttl     = 0
@@ -86,11 +86,11 @@ output "domain" {
 }
 
 module "s3_origin" {
-	source = "./modules/s3_origin"
+  source = "./modules/s3_origin"
 }
 
 module "apigw_origin" {
-	source = "./modules/apigw_origin"
+  source = "./modules/apigw_origin"
 }
 
 # lambda@edge
@@ -125,8 +125,8 @@ resource "aws_lambda_function" "lambda_edge" {
   runtime = "nodejs10.x"
   role    = "${aws_iam_role.lambda_edge_exec.arn}"
 
-	provider = aws.us_east_1
-	publish = true
+  provider = aws.us_east_1
+  publish  = true
 }
 
 data "aws_iam_policy_document" "lambda_edge_exec_role_policy" {
